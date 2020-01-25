@@ -1,0 +1,7 @@
+# The graph below shows the accuracy between amounts of trees based off the Gradient Boosting model created. 
+# Using the gbm.perf() you can create the graph to show the accuracy
+# This graph shows that around 400 trees the cross-validation error decreased and essentially flattens out. 
+# Therefore within the model the amount of trees above 500 or so would have been suffice to accurately predict called strikes
+
+gbm.perf(catcherframe_GBM, method = "cv")
+ 

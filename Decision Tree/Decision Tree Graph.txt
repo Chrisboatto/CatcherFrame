@@ -1,0 +1,20 @@
+# Using the rpart.plot command you can create the chart to show the flow of decision making the machine goes through.
+
+rpart.plot(catcherframe_DT)
+
+# Decision Tree Matrix
+
+# You can create a matrix based off the Decision Tree model to show the accuracy of the model. First you have to convert the predicted values into a data frame
+
+DT_predict_df <- as.data.frame(DT_predict)
+
+# You then table the results to show 
+
+DT_table <- table(Catcher_Train$calledstrike, DT_predict_df[[2]])
+
+# The matrix below shows the model’s accuracy based on a true positive, true negative, false positive, false negative matrix. The “0” represent the “FALSE” outcomes and the “1” represents the “TRUE” outcomes. As you can see above the model was extremely accurate. True Negatives equaled to 36073 while True Positives equaled 17570. Both False positive and negatives came out to 0!
+
+Predicted   
+        0            1
+  0    36073         0
+  1	0          17570

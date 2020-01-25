@@ -1,0 +1,11 @@
+# Because you already predicted off the train data set you will have to do the same to create the accuracy graph on the test data.
+
+XGB_predict_Test <- predict(XGB_model, Catcher_Test_xgb_x)
+
+# Then create a data frame with both the test and train data from the prediction on the test and the Test data.
+
+XGBplot_data <- as.data.frame(cbind(predicted = XGB_predict_Test, observed = Catcher_Test_xgb_y)
+
+# Using ggplot() you can create the accuracy graph based off the test data frame you created above. Be sure to specify the x an y portions of the graph
+
+ggplot(XGBplot_data, aes(x = predicted, y = observed)) + geom_point(color = "darkred", alpha = 0.5) + geom_smooth(method = lm) + ggtitle("Extreme Gradient Boosting: Prediction vs Test Data") + xlab("Observed Output") + ylab("Called Strike Predicted")

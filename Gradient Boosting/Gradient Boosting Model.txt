@@ -1,0 +1,12 @@
+# You can create the Gradient Boosting model with the line of code that follows. The number of trees is key because you do not want to voer fit your model which we will see at the graph
+
+catcherframe_GBM <- gbm(calledstrike ~ ball + plate_x + plate_z + relspeed + hbreak + vbreak + strikes + balls, data = Catcher_Train, distribution = "gaussian", n.trees = 1000, shrinkage = 0.01, interaction.depth = 5, cv.folds = 2, n.cores = NULL, verbose = FALSE)
+
+# To complete the prediction portion you will have to decide the amount of trees you would like to base the prediction of the model.
+
+n.trees <- seq(from = 100, to = 500, by = 100)
+
+# You then predict the model off the stated amount of trees and bind it to the same data set as the other three models to show the discrepency if any.
+
+GBM_predict <- predict(catcherframe_GBM, Catcher_Train, n.trees = n.trees)
+catcherframe_new <- cbind(catcherframe_new, GBM_predict)

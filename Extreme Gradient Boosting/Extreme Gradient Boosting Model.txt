@@ -1,0 +1,19 @@
+# To properly perform an Extremem Gradient Boosting model you will have to retrain the data to 4 sections as shown below.
+
+Catcher_Train_xgb_x <- xgb.DMatrix(as.matrix(Catcher_Train %>% select(-calledstrike)))
+Catcher_Train_xgb_y <- Catcher_Train$calledstrike
+Catcher_Test_xgb_x <- xgb.DMatrix(as.matrix(Catcher_Test %>% select(-calledstrike)))
+Catcher_Test_xgb_y <- Catcher_Test$calledstrike
+
+# You then have to create a control to specify the cross validation and number of folds within the model.
+
+TrainControl <- trainControl( method = "repeatedcv", number = 3, repeats = 2)
+
+# Then create and predict the model based on the Train data set.
+
+XGB_model <- train(Catcher_Train_xgb_x, Catcher_Train_xgb_y, method = "xgbTree", trControl = TrainControl, verbose = FALSE)
+
+XGB_predict <- predict(XGB_model, Catcher_Train)
+XGB_predict_Test <- predict(XGB_model, Catcher_Test_xgb_x)
+
+catcherframe_new <- cbind(catcherframe_new, XGB_predict)

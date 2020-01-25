@@ -1,0 +1,54 @@
+# Initial creation of the model from the attribute of the “calledstrike” on the rest of the attrributes
+
+model <- randomForest(calledstrike ~., data = Catcher_Train, importance = TRUE, ntrees = 1000) predCatcher_Train <- predict(model, Catcher_Train, type = "class") 
+table(predCatcher_Train, Catcher_Train$catcherid)
+
+# You can check the importance of attributes to the above model to understand what attributes affect the dependent variable that way you can be assured of a more accurate model.
+
+importance(model)
+
+# Recreating the model based off the importance function
+
+model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, importance = TRUE, ntrees = 1000) 
+
+# Predicting the accuracy of the model
+
+predCatcher_Train <- predict(model_1, Catcher_Train, type = “class”) 
+
+# Checking the Classification of the attribute in question
+
+class(catcherframe$calledstrike)
+catcherframe$calledstrike <- as.factor(catcherframecalledstrike)
+
+model1<-randomForest(calledstrike ~ ball+plate_x+plate_z+relspeed+vbreak+hbreak+strikes+balls,data=Catcher_T rain,importance=TRUE,ntrees=1000)
+
+class(catcherframe$calledstrike) 
+
+# ReTrain Data
+
+# Retraining the data for maximum accuracy
+
+train <- sample(nrow(catcherframe), 0.7*nrow(catcherframe), replace = FALSE) 
+Catcher_Train <- catcherframe[train,] 
+Catcher_Test <- catcherframe[-train,] 
+
+# Back to Random Forest
+
+# Rerunning the random forest model
+
+model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, importance = TRUE, ntrees = 1000) 
+
+# Predicting both on Train and Test data
+
+predCatcher_Train <- predict(model_1, Catcher_Train, type = “class”) 
+predCatcher_Test <- predict(model_1, Catcher_Test, type = “class”) 
+
+# Binding the predicted values attribute to a new dataset with the Train data
+
+catcherframe_new <- cbind(Catcher_Train, predCatcher_Train) 
+
+# Converting the new predicted attribute to numeric. The "-1" was to change the outcome from 1, 2 to 0, 1.
+
+catcherframe_new$predCatcher_T rain<-as.numeric(catcherframe_new$predCatcher_Train) - 1 
+
+# Finalizing the second model and predict on both the train and test data sets. Then binding the Train and prediction data into a main data set as a separate attribute

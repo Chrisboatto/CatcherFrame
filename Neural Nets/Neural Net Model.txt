@@ -1,0 +1,18 @@
+# Normalizing the data set to allow for the neural net model to run
+
+Catcher_Train_Scaled <- scale(Catcher_Train)
+
+# Creating the Neural Net Model
+
+nn_model <- neuralnet(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train_Scaled, hidden = c(5,3), act.fct = “logistic”, linear.output = FALSE)
+
+# Using the predict() to predict outcomes based off the normalized data set based off the model.
+
+nn_predict <- predict(nn_model, Catcher_Train_Scaled)
+View(nn_predict)
+summary(nn_predict) 
+
+# You can then attach and create a seperate attribute onto the same data set I attached the Random Forest model to show the differences. I do this for all models created and ran.
+
+catcherframe_new <- cbind(catcherframe_new, nn_predict)
+I created a Neural Network model based off the same parameters from the Random Forest model above. Once created I predicted the outcome based off the Train data set. Noticing that it did not work I had to normalize the data set with the scale() function and predict based off the normalized data set. I then bound the prediction data into the main data set as a separate output attribute 
