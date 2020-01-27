@@ -1,0 +1,235 @@
+---
+title: "2019 Jays application"
+output: word_document
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shoinstws you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+# Packages Needed
+
+install.packages("dplyr")
+install.packages("randomForest")
+install.packages("neuralnet")
+install.packages("rpart")
+install.packages("tidyverse")
+install.packages("caret")
+install.packages("gbm")
+install.packages("xgboost")
+install.packages("ggplot2")
+
+library(dplyr)
+library(randomForest)
+library(neuralnet)
+library(rpart)
+library(tidyverse)
+library(caret)
+library(gbm)
+library(xgboost)
+library(ggplot2)
+
+
+# Data Cleaning
+
+catcherframe <- filter(catcherframe, pitcheventtype == c("called_strike", "ball"))
+catcherframe <- filter(catcherframe, !is.na(ump_hp))
+catcherframe <- filter(catcherframe, catcherframe$balls != 4)
+catcherframe <- select(catcherframe, list = -c(pitcherhand, batside, pitchtype, pitcheventtype, bluejaysgameid))
+
+#Data Training
+
+train <- sample(nrow(catcherframe), 0.7*nrow(catcherframe), replace = FALSE)
+Catcher_Train <- catcherframe[train,]
+Catcher_Test <- catcherframe[-train,]
+
+# Random Forest
+
+model <- randomForest(calledstrike ~., data = Catcher_Train, importance = TRUE, ntrees = 1000)
+predCatcher_Train <- predict(model, Catcher_Train, type = "class")
+table(predCatcher_Train, Catcher_Train$catcherid)
+importance(model)
+model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, importance = TRUE, ntrees = 1000)
+predCatcher_Train <- predict(model_1, Catcher_Train, type = "class")
+class(catcherframe$calledstrike)
+catcherframe$calledstrike <- as.factor(catcherframe$calledstrike)
+model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, importance = TRUE, ntrees = 1000)
+class(catcherframe$calledstrike)
+train <- sample(nrow(catcherframe), 0.7*nrow(catcherframe), replace = FALSE)
+Catcher_Train <- catcherframe[train,]
+Catcher_Test <- catcherframe[-train,]
+model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, importance = TRUE, ntrees = 1000)
+predCatcher_Train <- predict(model_1, Catcher_Train, type = "class")
+predCatcher_Test <- predict(model_1, Catcher_Test, type = "class")
+catcherframe_new <- cbind(Catcher_Train, predCatcher_Train)
+predCatcher_Test <- predict(model_1, Catcher_Test, type = "class")
+predCatcher_Test
+catcherframe_new$predCatcher_Train <- as.numeric(catcherframe_new$predCatcher_Train) - 1
+catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes))
+catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum)
+View(catcherframe_new_2)
+catcherframe_new_2 <- rename(catcherframe_new_2, predCatcherRF = predCatcher_Train)
+
+Catcher_Train$calledstrike <- as.numeric(Catcher_Train$calledstrike) - 1
+View(Catcher_Train)
+View(catcherframe_new_2)
+
+#Graph RF
+
+pred_ROC_Curve_Rf <- predict(model_1, Catcher_Test, type = "prob")
+
+pretty_colors <- c("blue", "red")
+
+classes <- levels(Catcher_Test$calledstrike)
+
+for (i in 1:3)
++ {
++     true_values <- ifelse(Catcher_Test[,5]==classes[i],1,0)
++         pred_RF <- prediction(pred_ROC_Curve_Rf[,i],true_values)
++     perf_RF <- performance(pred_RF, "tpr", "fpr")
++     if (i==1)
++     {
++         plot(perf_RF,main="ROC Curve",col=pretty_colors[i]) 
++     }
++     else
++     {
++         plot(perf_RF,main="ROC Curve",col=pretty_colors[i],add=TRUE) 
++     }
++     # Calculate the AUC and print it to screen
++     auc_perf <- performance(pred_RF, measure = "auc")
++     print(auc_perf@y.values)
++ }
+
+# Neural Net
+
+Catcher_Train$calledstrike <- as.numeric(Catcher_Train$calledstrike) - 1
+
+Catcher_Test$calledstrike <- as.numeric(Catcher_Test$calledstrike) - 1
+
+Catcher_Train_Scaled <- scale(Catcher_Train)
+
+Catcher_Test_Scaled <- scale(Catcher_Test)
+
+nn_model <- neuralnet(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train_Scaled, hidden = c(5,3), act.fct = "logistic", linear.output = FALSE)
+
+nn_predict <- predict(nn_model, Catcher_Train_Scaled)
+
+View(nn_predict)
+
+nn_predict_test <- predict(nn_model, Catcher_Test_Scaled)
+
+
+summary(nn_predict)
+
+catcherframe_new <- cbind(catcherframe_new, nn_predict)
+
+View(catcherframe_new)
+
+catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes))
+catcherframe_new_1$predCatcher_Train <- as.numeric(catcherframe_new_1$predCatcher_Train) - 1
+
+catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum)
+
+# Graph NN
+
+plot(Catcher_Test_Scaled$calledstrike, nn_predict_test, col. = 'blue', pch = 16, ylab = "Predicted NN Rating", xlab= "Actual Rating", main = "NN Prediction Graph") + abline(0,1)
+
+# Decision Tree
+
+library(rpart)
+
+catcherframe_DT <- rpart(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, method = "class")
+
+DT_predict <- predict(catcherframe_DT,Catcher_Train)
+
+View(DT_predict)
+
+catcherframe_new <- cbind(catcherframe_new, DT_predict)
+
+catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes))
+
+catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum)
+
+rpart.plot(catcherframe_DT)
+
+DT_predict_df <- as.data.frame(DT_predict)
+
+DT_table <- table(Catcher_Train$calledstrike, DT_predict_df[[2]])
+
+DT_table
+   
+        0     1
+  0 36073     0
+  1     0 17570
+
+# GBM
+
+fitControl <- trainControl(method = "repeatedcv",  classProbs = FALSE, number = 4, repeats = 4)
+
+catcherframe_GBM <- gbm(calledstrike ~ ball + plate_x + plate_z + relspeed + hbreak + vbreak + strikes + balls, data = Catcher_Train, distribution = "gaussian", n.trees = 1000, shrinkage = 0.01, interaction.depth = 5, cv.folds = 2, n.cores = NULL, verbose = FALSE)
+
+n.trees <- seq(from = 100, to = 500, by = 100)
+
+predmatrix_GBM <- predict(catcherframe_GBM, Catcher_Test, n.trees = 1000)
+
+pred_GBM_test <- predict(catcherframe_GBM, Catcher_Test, n.trees = n.trees)
+
+dim(predmatrix_GBM)
+
+GBM_predict <- predict(catcherframe_GBM, Catcher_Train, n.trees = n.trees)
+
+catcher_test_error <- with(Catcher_Test, sapply((as.numeric(predmatrix_GBM) - as.numeric(calledstrike)) ^2, mean))
+
+res <- (as.numeric(Catcher_Test$calledstrike) - 1) - predmatrix_GBM
+
+plot(n.trees, catcher_test_error, pch = 10, col = "blue")
+
+n.trees_CTE_data <- cbind(n.trees, catcher_test_error)
+
+n.trees_CTE_data_1 <- merge(n.trees, catcher_test_error)
+
+ggplot(n.trees_CTE_data_1, aes(x = x, y = y,)) + geom_point( col = "green") + geom_smooth(method = lm) + scale_x_continuous(breaks = seq(100, 1000, by = 100))
+
+# GBM Plot
+
+gbm.perf(catcherframe_GBM, method = "cv")
+
+catcherframe_new <- cbind(catcherframe_new, GBM_predict)
+
+catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes))
+
+catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum)
+
+#XGB 
+
+Catcher_Train_xgb_x <- xgb.DMatrix(as.matrix(Catcher_Train %>% select(-calledstrike)))
+
+Catcher_Train_xgb_y <- Catcher_Train$calledstrike
+
+Catcher_Test_xgb_x <- xgb.DMatrix(as.matrix(Catcher_Test %>% select(-calledstrike)))
+
+Catcher_Test_xgb_y <- Catcher_Test$calledstrike
+
+TrainControl <- trainControl( method = "repeatedcv", number = 3, repeats = 2)
+
+XGB_model <- train(Catcher_Train_xgb_x, Catcher_Train_xgb_y, method = "xgbTree", trControl = TrainControl, verbose = FALSE)
+
+XGB_predict <- predict(XGB_model, Catcher_Train)
+
+XGB_predict_Test <- predict(XGB_model, Catcher_Test_xgb_x)
+
+XGBplot_data <- as.data.frame(cbind(predicted = XGB_predict_Test, observed = Catcher_Test_xgb_y))
+
+ggplot(XGBplot_data, aes(x = predicted, y = observed)) + geom_point(color = "darkred", alpha = 0.5) + geom_smooth(method = lm) + ggtitle("EGBoosting: Prediction vs Test Data") + xlab("Observed Output") + ylab("Called Strike Predicted")
+
+catcherframe_new <- cbind(catcherframe_new, XGB_predict)
+
+catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes))
+
+catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum)
