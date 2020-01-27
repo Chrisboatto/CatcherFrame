@@ -1,1 +1,4 @@
 pred_ROC_Curve_NN <- predict(nn_model, Catcher_Test, type = "prob")
+Catcher_Test_Scaled <- scale(Catcher_Test)
+nn_predict_test <- predict(nn_model, Catcher_Test_Scaled)
+plot(Catcher_Test$calledstrike, nn_predict_test, col. = 'blue', pch = 16, ylab = "Predicted NN Rating", xlab= "Actual Rating", main = "NN Prediction Graph") + abline(0,1)
