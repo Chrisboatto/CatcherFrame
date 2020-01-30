@@ -15,6 +15,7 @@ The preview shoinstws you a rendered HTML copy of the contents of the editor. Co
 
 # Packages Needed
 
+install.packages("devtools")
 install.packages("dplyr")
 install.packages("randomForest")
 install.packages("neuralnet")
@@ -25,6 +26,7 @@ install.packages("gbm")
 install.packages("xgboost")
 install.packages("ggplot2")
 
+library(devtools)
 library(dplyr)
 library(randomForest)
 library(neuralnet)
@@ -35,6 +37,9 @@ library(gbm)
 library(xgboost)
 library(ggplot2)
 
+# Data Importing
+
+devtools::install_github("Chrisboatto/catcherframe")
 
 # Data Cleaning
 

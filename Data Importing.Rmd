@@ -1,0 +1,7 @@
+# Data Importing
+
+install.packages("devtools")
+
+library(devtools)
+
+devtools::install_github("Chrisboatto/catcherframe")
