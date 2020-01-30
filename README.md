@@ -32,7 +32,7 @@ To improve your findings attach graphs within the project to show accuracy of th
 
  
 
-![Image of Random Forest for Catcher Frame]https://github.com/Chrisboatto/CatcherFrame/blob/master/Random%20Forest/Random%20Forest%20ROC%20Graph.jpeg
+![Image of Random Forest of Catcher Frame](https://github.com/Chrisboatto/CatcherFrame/blob/master/Random%20Forest/Random%20Forest%20ROC%20Graph.jpeg)
 
 
 
