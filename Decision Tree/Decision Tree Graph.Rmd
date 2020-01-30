@@ -12,7 +12,7 @@ DT_predict_df <- as.data.frame(DT_predict)
 
 DT_table <- table(Catcher_Train$calledstrike, DT_predict_df[[2]])
 
-# The matrix below shows the model’s accuracy based on a true positive, true negative, false positive, false negative matrix. The “0” represent the “FALSE” outcomes and the “1” represents the “TRUE” outcomes. As you can see above the model was extremely accurate. True Negatives equaled to 36073 while True Positives equaled 17570. Both False positive and negatives came out to 0!
+# The matrix below shows the model's accuracy based on a true positive, true negative, false positive, false negative matrix. The "0" represent the "FALSE" outcomes and the "1" represents the "TRUE" outcomes. As you can see above the model was extremely accurate. True Negatives equaled to 36073 while True Positives equaled 17570. Both False positive and negatives came out to 0!
 
 Predicted   
         0            1

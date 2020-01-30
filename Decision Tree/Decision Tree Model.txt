@@ -1,3 +1,0 @@
-catcherframe_DT <- rpart(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train, method = “class”) DT_predict <- predict(catcherframe_DT,Catcher_Train)
-DT_predict <- predict(catcherframe_DT, Catcher_Train)
-catcherframe_new <- cbind(catcherframe_new, DT_predict) 

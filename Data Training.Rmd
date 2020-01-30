@@ -1,0 +1,14 @@
+---
+title: "Catcherframe data training"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Data Training
+
+train <- sample(nrow(catcherframe), 0.7*nrow(catcherframe), replace = FALSE)
+Catcher_Train <- catcherframe[train,]
+Catcher_Test <- catcherframe[-train,]

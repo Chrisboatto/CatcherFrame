@@ -1,0 +1,15 @@
+---
+title: "catcherframe data cleaning"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data Cleaning
+
+catcherframe <- filter(catcherframe, pitcheventtype == c("called_strike", "ball"))
+catcherframe <- filter(catcherframe, !is.na(ump_hp))
+catcherframe <- filter(catcherframe, catcherframe$balls != 4)
+catcherframe <- select(catcherframe, list = -c(pitcherhand, batside, pitchtype, pitcheventtype, bluejaysgameid))

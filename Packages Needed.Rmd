@@ -1,3 +1,16 @@
+---
+title: "CatcherFrame Package"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+# Packages Needed
+
 install.packages("dplyr")
 install.packages("randomForest")
 install.packages("neuralnet")
@@ -17,3 +30,6 @@ library(caret)
 library(gbm)
 library(xgboost)
 library(ggplot2)
+
+
+

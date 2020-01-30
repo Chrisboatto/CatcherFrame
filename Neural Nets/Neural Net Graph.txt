@@ -1,1 +1,0 @@
-plot(Catcher_Test$calledstrike, nn_predict_test, col. = 'blue', pch = 16, ylab = "Predicted NN Rating", xlab= "Actual Rating", main = "NN Prediction Graph") + abline(0,1)

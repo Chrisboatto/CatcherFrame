@@ -1,4 +1,9 @@
-# Initial creation of the model from the attribute of the “calledstrike” on the rest of the attrributes
+---
+title: "Untitled"
+output: html_document
+---
+
+# Initial creation of the model from the attribute of the "calledstrike" on the rest of the attrributes
 
 model <- randomForest(calledstrike ~., data = Catcher_Train, importance = TRUE, ntrees = 1000) predCatcher_Train <- predict(model, Catcher_Train, type = "class") 
 table(predCatcher_Train, Catcher_Train$catcherid)
@@ -13,7 +18,7 @@ model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbr
 
 # Predicting the accuracy of the model
 
-predCatcher_Train <- predict(model_1, Catcher_Train, type = “class”) 
+predCatcher_Train <- predict(model_1, Catcher_Train, type = "class") 
 
 # Checking the Classification of the attribute in question
 
@@ -40,8 +45,8 @@ model_1 <- randomForest(calledstrike ~ ball + plate_x + plate_z + relspeed + vbr
 
 # Predicting both on Train and Test data
 
-predCatcher_Train <- predict(model_1, Catcher_Train, type = “class”) 
-predCatcher_Test <- predict(model_1, Catcher_Test, type = “class”) 
+predCatcher_Train <- predict(model_1, Catcher_Train, type = "class") 
+predCatcher_Test <- predict(model_1, Catcher_Test, type = "class") 
 
 # Binding the predicted values attribute to a new dataset with the Train data
 

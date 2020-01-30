@@ -4,4 +4,3 @@
 # Therefore within the model the amount of trees above 500 or so would have been suffice to accurately predict called strikes
 
 gbm.perf(catcherframe_GBM, method = "cv")
- 

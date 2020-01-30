@@ -1,10 +1,16 @@
 # Normalizing the data set to allow for the neural net model to run
 
+Catcher_Train$calledstrike <- as.numeric(Catcher_Train$calledstrike) - 1
+
+Catcher_Test$calledstrike <- as.numeric(Catcher_Test$calledstrike) - 1
+
 Catcher_Train_Scaled <- scale(Catcher_Train)
+
+Catcher_Test_Scaled <- scale(Catcher_Test)
 
 # Creating the Neural Net Model
 
-nn_model <- neuralnet(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train_Scaled, hidden = c(5,3), act.fct = “logistic”, linear.output = FALSE)
+nn_model <- neuralnet(calledstrike ~ ball + plate_x + plate_z + relspeed + vbreak + hbreak + strikes + balls, data = Catcher_Train_Scaled, hidden = c(5,3), act.fct = "logistic", linear.output = FALSE)
 
 # Using the predict() to predict outcomes based off the normalized data set based off the model.
 
