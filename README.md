@@ -10,30 +10,22 @@ Which catcher was the most effective framer on a rate basis?
 
  First you will need to download the catcherframe data set off my GitHub account and install the devtools package to do so. 
 
- 
-
-`Install.packages(“devtools”)`
+ `Install.packages(“devtools”)`
 
 `devtools::install_github("Chrisboatto/catcherframe")`
 
 `library(catcherframe)`
 
- 
+ This allows you to import the dataset to allow you to begin solving the question; which catcher catches pitches the best?
 
-This allows you to import the dataset to allow you to begin solving the question; which catcher catches pitches the best?
-
- 
-
-The style in which you create the model to test is completely individualistic and as you read through the project you will see five different ways in which you can conclude a metric to depict which catcher catches pitches the best.
-
- 
+ The style in which you create the model to test is completely individualistic and as you read through the project you will see five different ways in which you can conclude a metric to depict which catcher catches pitches the best.
 
 To improve your findings attach graphs within the project to show accuracy of the models that you created. Below is just one example. It shows the accuracy of the Random Forest model that I created to decipher the best catcher.
 
- 
+ ![Image of Random Forest of Catcher Frame](https://github.com/Chrisboatto/CatcherFrame/blob/master/Random%20Forest/Random%20Forest%20ROC%20Graph.jpeg)
 
-![Image of Random Forest of Catcher Frame](https://github.com/Chrisboatto/CatcherFrame/blob/master/Random%20Forest/Random%20Forest%20ROC%20Graph.jpeg)
+**Each Folder**
 
-
+When searching through each folder you will have to run the model files before the graphing files. The graphs are based off the models within each folder therefore without the models and predictions the graphs will not appear.
 
 **Lets get started!!***

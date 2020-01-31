@@ -1,11 +1,11 @@
 # Using the dplyr package you can now remove attributes that are not conducive to the finished product
 
-catcherframe_new_1 <- select(catcherframe_new, by = -c(calledstrike, ball, takes)) 
+catcherframe_condensed <- select(catcherframe_new, by = -c(calledstrike, ball, takes)) 
 
 # You then use the aggregate function to summarize the scores per catcher to find out which catcher has the highest score.
 
-catcherframe_new_2 <- aggregate(catcherframe_new_1, by = list(catcherframe_new$catcherid), FUN = sum) View(catcherframe_new_2) 
+catcherframe_solved <- aggregate(catcherframe_condensed, by = list(catcherframe_new$catcherid), FUN = sum) View(catcherframe_new_2) 
 
 # For easier reading I renamed an attribute but this is completely optional
 
-catcherframe_new_2 <- rename(catcherframe_new_2, predCatcherRF = predCatcher_Train)
+catcherframe_solved <- rename(catcherframe_solved, predCatcherRF = predCatcher_Train)
