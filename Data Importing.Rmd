@@ -4,4 +4,4 @@ install.packages("devtools")
 
 library(devtools)
 
-devtools::install_github("Chrisboatto/catcherframe")
+devtools::install_github("Chrisboatto/catcherframe/catcherframe.csv")

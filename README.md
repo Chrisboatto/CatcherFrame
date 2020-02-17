@@ -12,7 +12,7 @@ Which catcher was the most effective framer on a rate basis?
 
  `Install.packages(“devtools”)`
 
-`devtools::install_github("Chrisboatto/catcherframe")`
+`devtools::install_github("Chrisboatto/catcherframe/catcherframe.csv")`
 
 `library(catcherframe)`
 

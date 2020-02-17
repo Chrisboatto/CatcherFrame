@@ -39,7 +39,7 @@ library(ggplot2)
 
 # Data Importing
 
-devtools::install_github("Chrisboatto/catcherframe")
+devtools::install_github("Chrisboatto/catcherframe/catcherframe.csv")
 
 # Data Cleaning
 
